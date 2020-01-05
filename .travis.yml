@@ -1,0 +1,36 @@
+dist: bionic
+sudo: false
+language: cpp
+compiler: gcc
+
+os: linux
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+      - llvm-toolchain-bionic-8
+      - key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
+    packages:
+      - g++-7
+      - lcov
+
+before_install:
+  - pip install --user cpp-coveralls
+
+script:
+  - export CC=gcc-7
+  - export CXX=g++-7
+  - cd tests
+  - mkdir cmake
+  - cd cmake/
+  - cmake --version
+  - cmake ../
+  - make
+  - ctest --verbose
+
+after_success:
+  - lcov --capture --directory . --output-file coverage.info -b "$PWD/../../sources/" --no-external
+  - lcov --remove coverage.info '/usr/*' --output-file coverage.info 
+  - lcov --list coverage.info
+  - bash <(curl -s https://codecov.io/bash) -f coverage.info -t 95b05194-7864-4ac6-897a-e60379c01978 || echo "Codecov did not collect coverage reports"
+
