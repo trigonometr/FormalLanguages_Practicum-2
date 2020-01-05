@@ -32,4 +32,4 @@ after_success:
   - lcov --capture --directory . --output-file coverage.info -b "$PWD/../../sources/" --no-external
   - lcov --remove coverage.info '/usr/*' --output-file coverage.info 
   - lcov --list coverage.info
- - bash <(curl -s https://codecov.io/bash) -f coverage.info -t 30e697e1-7413-4a85-b849-4cc75034de09 || echo "Codecov did not collect coverage reports"
+  - bash <(curl -s https://codecov.io/bash) -f coverage.info -t 30e697e1-7413-4a85-b849-4cc75034de09 || echo "Codecov did not collect coverage reports"
